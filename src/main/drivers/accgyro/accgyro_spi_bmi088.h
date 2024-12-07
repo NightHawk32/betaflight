@@ -20,32 +20,12 @@
 
 #pragma once
 
+#include "drivers/bus.h"
 
-#include <stdint.h>
+#ifdef USE_ACCGYRO_SPI_BMI088
+    #define GYRO_USES_SPI
+#endif 
 
-#include "pg/pg.h"
-#include "common/sensor_alignment.h"
-#include "drivers/io_types.h"
-
-#ifdef USE_MULTI_GYRO
-#define MAX_GYRODEV_COUNT 2
-#define MAX_ACCDEV_COUNT 2
-#else
-#define MAX_GYRODEV_COUNT 1
-#define MAX_ACCDEV_COUNT 1
-#endif
-
-typedef struct gyroDeviceConfig_s {
-    int8_t index;
-    uint8_t busType;
-    uint8_t spiBus;
-    ioTag_t csnTag;
-    ioTag_t csnAccTag;
-    uint8_t i2cBus;
-    uint8_t i2cAddress;
-    ioTag_t extiTag;
-    uint8_t alignment;        // sensor_align_e
-    sensorAlignment_t customAlignment;
-} gyroDeviceConfig_t;
-
-PG_DECLARE_ARRAY(gyroDeviceConfig_t, MAX_GYRODEV_COUNT, gyroDeviceConfig);
+uint8_t bmi088SpiDetect(const extDevice_t *dev);
+bool bmi088SpiGyroDetect(gyroDev_t *gyro);
+bool bmi088SpiAccDetect(accDev_t *acc);
